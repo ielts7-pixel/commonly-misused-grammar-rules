@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>國中生常錯文法 Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #fef9f0;
+    --card: #ffffff;
+    --primary: #ff6b35;
+    --primary-light: #fff0eb;
+    --secondary: #3a86ff;
+    --secondary-light: #ebf3ff;
+    --green: #2ec4b6;
+    --green-light: #e8faf9;
+    --red: #e63946;
+    --red-light: #fdecea;
+    --yellow: #ffbe0b;
+    --text: #2d2d2d;
+    --muted: #888;
+    --border: #e8e0d5;
+    --shadow: 0 4px 20px rgba(0,0,0,0.08);
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 24px 16px 40px;
+    color: var(--text);
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #ffbe0b22 1px, transparent 1px);
+    background-size: 28px 28px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 32px;
+    animation: slideDown 0.6s ease;
+  }
+
+  .header .badge {
+    display: inline-block;
+    background: var(--primary);
+    color: white;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 4px 14px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+  }
+
+  .header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: clamp(26px, 5vw, 36px);
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .header h1 span { color: var(--primary); }
+
+  .header p {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .rule-box {
+    background: linear-gradient(135deg, #3a86ff15, #3a86ff08);
+    border: 2px solid #3a86ff30;
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-bottom: 28px;
+    animation: slideDown 0.7s ease;
+  }
+
+  .rule-box h3 {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--secondary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .rule-box .rules {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .rule-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .rule-item .icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+  }
+
+  .rule-item.ok .icon { background: var(--green-light); color: var(--green); }
+  .rule-item.no .icon { background: var(--red-light); color: var(--red); }
+  .rule-item.ok { color: var(--green); }
+  .rule-item.no { color: var(--red); }
+
+  .progress-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    animation: slideDown 0.8s ease;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: var(--border);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary), var(--yellow));
+    border-radius: 99px;
+    transition: width 0.5s ease;
+  }
+
+  .progress-label {
+    font-size: 13px;
+    font-weight: 800;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .question-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 16px;
+    border: 2px solid transparent;
+    transition: border-color 0.3s;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .question-card.correct { border-color: var(--green); }
+  .question-card.wrong { border-color: var(--red); }
+
+  .q-number {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 14px;
+  }
+
+  .q-number .dot {
+    width: 8px; height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+  }
+
+  .question-text {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.7;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .blank {
+    display: inline-block;
+    min-width: 70px;
+    border-bottom: 3px solid var(--primary);
+    text-align: center;
+    margin: 0 4px;
+    padding: 0 8px;
+    font-weight: 900;
+    color: var(--primary);
+    vertical-align: bottom;
+  }
+
+  .options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: var(--bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--text);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+    line-height: 1.4;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: var(--primary-light);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255,107,53,0.15);
+  }
+
+  .option-btn .letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: var(--border);
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 900;
+    margin-right: 8px;
+    transition: all 0.2s;
+  }
+
+  .option-btn:hover:not(:disabled) .letter {
+    background: var(--primary);
+    color: white;
+  }
+
+  .option-btn.selected {
+    background: var(--secondary-light);
+    border-color: var(--secondary);
+  }
+
+  .option-btn.selected .letter {
+    background: var(--secondary);
+    color: white;
+  }
+
+  .option-btn.correct-ans {
+    background: var(--green-light);
+    border-color: var(--green);
+  }
+
+  .option-btn.correct-ans .letter {
+    background: var(--green);
+    color: white;
+  }
+
+  .option-btn.wrong-ans {
+    background: var(--red-light);
+    border-color: var(--red);
+  }
+
+  .option-btn.wrong-ans .letter {
+    background: var(--red);
+    color: white;
+  }
+
+  .option-btn:disabled { cursor: default; }
+
+  .feedback {
+    margin-top: 14px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.5;
+    display: none;
+  }
+
+  .feedback.show { display: block; animation: fadeUp 0.3s ease; }
+  .feedback.correct { background: var(--green-light); color: #1a8a82; border-left: 4px solid var(--green); }
+  .feedback.wrong { background: var(--red-light); color: #b52a34; border-left: 4px solid var(--red); }
+
+  .score-panel {
+    background: var(--card);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+    text-align: center;
+    box-shadow: var(--shadow);
+    display: none;
+    animation: fadeUp 0.5s ease;
+  }
+
+  .score-panel.show { display: block; }
+
+  .score-emoji {
+    font-size: 56px;
+    margin-bottom: 12px;
+  }
+
+  .score-panel h2 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 28px;
+    font-weight: 800;
+    margin-bottom: 8px;
+  }
+
+  .score-num {
+    font-size: 52px;
+    font-weight: 900;
+    color: var(--primary);
+    line-height: 1;
+    margin: 12px 0;
+    font-family: 'Baloo 2', cursive;
+  }
+
+  .score-panel p {
+    color: var(--muted);
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .retry-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 36px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(255,107,53,0.35);
+  }
+
+  .retry-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(255,107,53,0.45);
+  }
+
+  @keyframes slideDown {
+    from { opacity: 0; transform: translateY(-16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 480px) {
+    .options { grid-template-columns: 1fr; }
+    .rule-box .rules { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">Grammar Practice</div>
+    <h1>國中生常錯 <span>文法</span></h1>
+    <p>中學英文常見文法錯誤練習 | Middle School Common Grammar Mistakes</p>
+  </div>
+
+  <div class="rule-box" id="ruleBox" style="display:none;">
+    <h3>📌 Remember the Rule</h3>
+    <div class="rules" id="rulesContent"></div>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">0 / 15</div>
+  </div>
+
+  <div id="quizArea"></div>
+
+  <div class="score-panel" id="scorePanel">
+    <div class="score-emoji" id="scoreEmoji">🎉</div>
+    <h2 id="scoreTitle">Quiz Complete!</h2>
+    <div class="score-num" id="scoreNum">0/15</div>
+    <p id="scoreMsg"></p>
+    <button class="retry-btn" onclick="initQuiz()">Try Again 🔄</button>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "I have {B1} money to buy a new phone. (我有一點錢可以買新手機)",
+    options: [
+      { label: "A", text: "little" },
+      { label: "B", text: "a little" },
+      { label: "C", text: "few" },
+      { label: "D", text: "a few" }
+    ],
+    answer: "B",
+    explanation: "✅ 正確：'a little' 用於不可數名詞，表示『有一些』(肯定)。Money 是不可數。❌ little 表『沒多少』(否定)；few/a few 用於可數名詞。"
+  },
+  {
+    text: "There are {B1} apples on the table. I don't want to eat them. (桌上只有幾個蘋果，我不想吃)",
+    options: [
+      { label: "A", text: "little" },
+      { label: "B", text: "a little" },
+      { label: "C", text: "few" },
+      { label: "D", text: "a few" }
+    ],
+    answer: "C",
+    explanation: "✅ 正確：'few' 用於可數名詞，表示『不多、很少』(否定含義)。Apples 是可數。❌ a few 表『有一些』(肯定)；little/a little 用於不可數。"
+  },
+  {
+    text: "Would you like {B1} coffee? (你想喝一點咖啡嗎?)",
+    options: [
+      { label: "A", text: "little" },
+      { label: "B", text: "a little" },
+      { label: "C", text: "few" },
+      { label: "D", text: "a few" }
+    ],
+    answer: "B",
+    explanation: "✅ 正確：'a little' 用於不可數名詞，表『一點點』。Coffee 不可數。❌ little 表不夠或沒有；few 用於可數；a few 也用於可數。"
+  },
+  {
+    text: "We have {B1} students in the class today. (今天班上學生不多)",
+    options: [
+      { label: "A", text: "little" },
+      { label: "B", text: "a little" },
+      { label: "C", text: "few" },
+      { label: "D", text: "a few" }
+    ],
+    answer: "C",
+    explanation: "✅ 正確：'few' 用於可數名詞，表『不多』(負面含義)。Students 可數。❌ little 用於不可數；a few 表『有幾個』(正面)；a little 用於不可數。"
+  },
+  {
+    text: "I enjoy {B1} with my friends on weekends. (我喜歡在週末和朋友一起玩)",
+    options: [
+      { label: "A", text: "play" },
+      { label: "B", text: "to play" },
+      { label: "C", text: "playing" },
+      { label: "D", text: "played" }
+    ],
+    answer: "C",
+    explanation: "✅ 正確：Enjoy 後面接動名詞 (V+ing)。常見搭配：enjoy + -ing。❌ to play (infinitive) 用於 want, like, need 等。play/played 不對。"
+  },
+  {
+    text: "She wants {B1} to the beach next summer. (她想明年夏天去海灘)",
+    options: [
+      { label: "A", text: "go" },
+      { label: "B", text: "to go" },
+      { label: "C", text: "going" },
+      { label: "D", text: "went" }
+    ],
+    answer: "B",
+    explanation: "✅ 正確：Want 後接不定詞 (to + V)。搭配：want + to + V。❌ go/went 缺少 to；going 不對，enjoy/finish 才用 -ing。"
+  },
+  {
+    text: "I finished {B1} my homework at 8 PM. (我晚上8點完成做功課)",
+    options: [
+      { label: "A", text: "do" },
+      { label: "B", text: "to do" },
+      { label: "C", text: "doing" },
+      { label: "D", text: "done" }
+    ],
+    answer: "C",
+    explanation: "✅ 正確：Finish 後接動名詞 (V+ing)。搭配：finish + -ing。❌ to do (infinitive) 用於 want, need；do/done 不正確。"
+  },
+  {
+    text: "He asked me {B1} him with the project. (他要求我幫他做專案)",
+    options: [
+      { label: "A", text: "help" },
+      { label: "B", text: "to help" },
+      { label: "C", text: "helping" },
+      { label: "D", text: "helped" }
+    ],
+    answer: "B",
+    explanation: "✅ 正確：Ask 後接不定詞 (to + V)。搭配：ask + to + V。❌ help (缺少 to)；helping 用於 enjoy/finish；helped 時態不對。"
+  },
+  {
+    text: "I have three books. One is for me, {B1} is for you. (我有三本書。一本是給我的，{B1}是給你的)",
+    options: [
+      { label: "A", text: "one" },
+      { label: "B", text: "another" },
+      { label: "C", text: "the other" },
+      { label: "D", text: "the others" }
+    ],
+    answer: "C",
+    explanation: "✅ 正確：'the other' 用於三個中的『另一個』(確定有三個)。❌ one (第一個已說)；another (表『再一個』不確定)；the others (複數，這裡是單數)。"
+  },
+  {
+    text: "There are many students in the classroom. Some study English, {B1} study math. (教室裡有很多學生，有的學英文，有的學數學)",
+    options: [
+      { label: "A", text: "one" },
+      { label: "B", text: "another" },
+      { label: "C", text: "the other" },
+      { label: "D", text: "the others" }
+    ],
+    answer: "D",
+    explanation: "✅ 正確：'the others' 指『剩下的全部』(複數)。❌ one (單數)；another (不確定有多少)；the other (單數，這裡是複數)。"
+  },
+  {
+    text: "I have two pens. One is black, and {{B1}} is red. (我有兩支筆。一支是黑色的，{B1}是紅色的)",
+    options: [
+      { label: "A", text: "one" },
+      { label: "B", text: "another" },
+      { label: "C", text: "the other" },
+      { label: "D", text: "the others" }
+    ],
+    answer: "C",
+    explanation: "✅ 正確：『一個...另一個』搭配 = 'one...the other'。只有兩個時用 'the other'。❌ one (兩個都用 one 重複)；another (表『又一個』含義不同)；the others (複數)。"
+  },
+  {
+    text: "I want {B1} pen. This one is mine. (我想要另一支筆。這支是我的)",
+    options: [
+      { label: "A", text: "one" },
+      { label: "B", text: "another" },
+      { label: "C", text: "the other" },
+      { label: "D", text: "the others" }
+    ],
+    answer: "B",
+    explanation: "✅ 正確：'another' = 『又一個、再一個』(不確定總共有幾個)。❌ one (代詞，說『想要一個』需要形容詞修飾)；the other (用於確定有兩個/三個)；the others (複數)。"
+  },
+  {
+    text: "Tom is the {B1} student in his class. (湯姆是他班上最聰明的學生)",
+    options: [
+      { label: "A", text: "smartest" },
+      { label: "B", text: "more smart" },
+      { label: "C", text: "most smart" },
+      { label: "D", text: "smart" }
+    ],
+    answer: "A",
+    explanation: "✅ 正確：最高級用 'the + -est' (smart → smartest)。❌ more smart (比較級，不是最高級)；most smart (不規則，應該 'smartest')；smart (原級)。"
+  },
+  {
+    text: "This is the longest river {{B1}} the world. (這是世界上最長的河)",
+    options: [
+      { label: "A", text: "at" },
+      { label: "B", text: "in" },
+      { label: "C", text: "on" },
+      { label: "D", text: "of" }
+    ],
+    answer: "B",
+    explanation: "✅ 正確：『最高級 + in + 地點』表『在...中最...』(世界上)。'The + superlative + in'。❌ at/on 不對；of 用於『...中的』但這裡用 'in'。"
+  },
+  {
+    text: "She is the most beautiful girl {{B1}} our school. (她是我們學校最漂亮的女孩)",
+    options: [
+      { label: "A", text: "at" },
+      { label: "B", text: "in" },
+      { label: "C", text: "on" },
+      { label: "D", text: "of" }
+    ],
+    answer: "D",
+    explanation: "✅ 正確：『最高級 + of + 人群/群體』表『在...中最...』。'The + superlative + of'。❌ in (用於地點/城市，但『school of』指群體)；at/on 不對。"
+  }
+];
+
+let answered = [];
+
+function initQuiz() {
+  answered = new Array(questions.length).fill(null);
+  document.getElementById('scorePanel').classList.remove('show');
+  document.getElementById('progressFill').style.width = '0%';
+  document.getElementById('progressLabel').textContent = `0 / ${questions.length}`;
+  renderAll();
+}
+
+function renderAll() {
+  const area = document.getElementById('quizArea');
+  area.innerHTML = '';
+  questions.forEach((q, i) => renderQuestion(q, i, area));
+}
+
+function renderQuestion(q, index, container) {
+  const card = document.createElement('div');
+  card.className = 'question-card';
+  card.id = `card-${index}`;
+
+  let parts = q.text.split(/\{B\d+\}/g);
+  let blanks = [];
+  let match;
+  const re = /\{(B\d+)\}/g;
+  while ((match = re.exec(q.text)) !== null) blanks.push(match[1]);
+
+  let questionHTML = '';
+  parts.forEach((part, i) => {
+    questionHTML += part;
+    if (i < blanks.length) questionHTML += `<span class="blank" id="blank-${index}-${i+1}">______</span>`;
+  });
+
+  card.innerHTML = `
+    <div class="q-number"><span class="dot"></span>Question ${index + 1}</div>
+    <div class="question-text">${questionHTML}</div>
+    <div class="options" id="opts-${index}">
+      ${q.options.map(opt => `
+        <button class="option-btn" onclick="selectAnswer(${index}, '${opt.label}')" id="opt-${index}-${opt.label}">
+          <span class="letter">${opt.label}</span>${opt.text}
+        </button>
+      `).join('')}
+    </div>
+    <div class="feedback" id="fb-${index}"></div>
+  `;
+
+  container.appendChild(card);
+}
+
+function selectAnswer(qIndex, choice) {
+  if (answered[qIndex] !== null) return;
+  answered[qIndex] = choice;
+
+  const q = questions[qIndex];
+  const isCorrect = choice === q.answer;
+  const card = document.getElementById(`card-${qIndex}`);
+  const fb = document.getElementById(`fb-${qIndex}`);
+
+  q.options.forEach(opt => {
+    const btn = document.getElementById(`opt-${qIndex}-${opt.label}`);
+    btn.disabled = true;
+    if (opt.label === q.answer) btn.classList.add('correct-ans');
+    else if (opt.label === choice && !isCorrect) btn.classList.add('wrong-ans');
+  });
+
+  card.classList.add(isCorrect ? 'correct' : 'wrong');
+  fb.className = `feedback show ${isCorrect ? 'correct' : 'wrong'}`;
+  fb.innerHTML = q.explanation;
+
+  updateProgress();
+
+  if (answered.every(a => a !== null)) {
+    setTimeout(showScore, 800);
+  }
+}
+
+function updateProgress() {
+  const done = answered.filter(a => a !== null).length;
+  const pct = (done / questions.length) * 100;
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = `${done} / ${questions.length}`;
+}
+
+function showScore() {
+  const correct = answered.filter((a, i) => a === questions[i].answer).length;
+  const total = questions.length;
+  const panel = document.getElementById('scorePanel');
+
+  let emoji, title, msg;
+  if (correct === total) { emoji = '🏆'; title = 'Perfect Score!'; msg = '完美答對！你的文法掌握得很好！Excellent! Your grammar mastery is outstanding!'; }
+  else if (correct >= Math.ceil(total * 0.8)) { emoji = '🌟'; title = 'Great Job!'; msg = '非常好！再複習一下有疑問的部分。Excellent — review the ones you missed!'; }
+  else if (correct >= Math.ceil(total * 0.6)) { emoji = '👍'; title = 'Good Effort!'; msg = '不錯的努力。多練習會變得更好。You are on the right track. Keep practicing!'; }
+  else { emoji = '📚'; title = 'Keep Practicing!'; msg = '複習說明並再試一次，你可以的！Review the explanations and try again — you got this!'; }
+
+  document.getElementById('scoreEmoji').textContent = emoji;
+  document.getElementById('scoreTitle').textContent = title;
+  document.getElementById('scoreNum').textContent = `${correct} / ${total}`;
+  document.getElementById('scoreMsg').textContent = msg;
+  panel.classList.add('show');
+  panel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+initQuiz();
+</script>
+</body>
+</html>
